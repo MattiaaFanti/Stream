@@ -2,7 +2,7 @@
 <html>
 <body>
 
-<h2>Programmazione delle partite di calcio italiane</h2>
+<h2>Contenuto del sito web</h2>
 
 <pre id="output"></pre>
 
@@ -10,39 +10,10 @@
 fetch('https://sportsonline.gl/prog.txt')
   .then(response => response.text())
   .then(data => {
-    var lines = data.split('\n');
-    var output = [];
-    var day = '';
-    var italianChannels = [];
-
-    for (var i = 0; i < lines.length; i++) {
-      var line = lines[i].trim();
-
-      // Controlla se la riga è un giorno della settimana
-      if (line.match(/^(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)$/)) {
-        day = line;
-        italianChannels = []; // Resetta i canali italiani per il nuovo giorno
-      }
-
-      // Controlla se la riga è un canale italiano
-      if (line.match(/^HD\d+ ITALIAN$/)) {
-        var channelNumber = line.match(/\d+/)[0]; // Estrae il numero del canale
-        italianChannels.push('hd' + channelNumber);
-      }
-
-      // Controlla se la riga contiene un link a una partita di calcio italiana
-      for (var j = 0; j < italianChannels.length; j++) {
-        if (line.includes(italianChannels[j])) {
-          output.push(day);
-          output.push(line);
-          output.push('');
-          break;
-        }
-      }
-    }
-
-    document.getElementById('output').innerText = output.join('\n');
-  });
+    // Ora puoi manipolare i dati come desideri
+    document.getElementById('output').innerText = data;
+  })
+  .catch(error => console.error('Si è verificato un errore:', error));
 </script>
 
 </body>
