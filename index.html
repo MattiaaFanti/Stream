@@ -1,17 +1,49 @@
-<iframe id="myIframe" src="https://sportsonline.gl/prog.txt" width="100%" height="500"></iframe>
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Programmazione delle partite di calcio italiane</h2>
+
+<pre id="output"></pre>
 
 <script>
-window.onload = function() {
-  var iframe = document.getElementById('myIframe');
-  iframe.onload = function() {
-    if(iframe.contentDocument) {
-      var content = iframe.contentDocument.body.innerText;
-      var lines = content.split('\n');
-      var nonEmptyLines = lines.filter(function(line) {
-        return line.trim() !== '';
-      });
-      iframe.contentDocument.body.innerText = nonEmptyLines.join('\n');
+fetch('https://sportsonline.gl/prog.txt')
+  .then(response => response.text())
+  .then(data => {
+    var lines = data.split('\n');
+    var output = [];
+    var day = '';
+    var italianChannels = [];
+
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i].trim();
+
+      // Controlla se la riga è un giorno della settimana
+      if (line.match(/^(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)$/)) {
+        day = line;
+        italianChannels = []; // Resetta i canali italiani per il nuovo giorno
+      }
+
+      // Controlla se la riga è un canale italiano
+      if (line.match(/^HD\d+ ITALIAN$/)) {
+        var channelNumber = line.match(/\d+/)[0]; // Estrae il numero del canale
+        italianChannels.push('hd' + channelNumber);
+      }
+
+      // Controlla se la riga contiene un link a una partita di calcio italiana
+      for (var j = 0; j < italianChannels.length; j++) {
+        if (line.includes(italianChannels[j])) {
+          output.push(day);
+          output.push(line);
+          output.push('');
+          break;
+        }
+      }
     }
-  }
-}
+
+    document.getElementById('output').innerText = output.join('\n');
+  });
 </script>
+
+</body>
+</html>
