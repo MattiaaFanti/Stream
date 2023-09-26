@@ -1,20 +1,22 @@
-<!DOCTYPE html>
 <html>
+<head>
+<title>Leggere testo da URL</title>
+</head>
 <body>
-
-<h2>Contenuto del sito web</h2>
-
-<pre id="output"></pre>
-
+<h1>Leggere testo da URL</h1>
+<div id="mio_testo"></div>
 <script>
-fetch('https://sportsonline.gl/prog.txt')
-  .then(response => response.text())
-  .then(data => {
-    // Ora puoi manipolare i dati come desideri
-    document.getElementById('output').innerText = data;
-  })
-  .catch(error => console.error('Si è verificato un errore:', error));
+// Imposto l'URL da cui leggere il testo
+let url = "https://sportsonline.gl/prog.txt";
+// Leggo il testo con fetch
+fetch(url)
+  .then(response => response.text()) // Converto la risposta in testo
+  .then(text => {
+    // Mostro il testo a schermo
+    console.log(text);
+    // Oppure lo inserisco in un elemento HTML
+    document.getElementById("mio_testo").innerHTML = text;
+  });
 </script>
-
 </body>
 </html>
