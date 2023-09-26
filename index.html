@@ -1,49 +1,35 @@
-<!DOCTYPE html>
-<html>
-<body>
+<?php
+$data = file_get_contents('https://sportsonline.gl/prog.txt');
+$lines = explode("\n", $data);
+$output = [];
+$day = '';
+$italianChannels = [];
 
-<h2>Programmazione delle partite di calcio italiane</h2>
+foreach ($lines as $line) {
+  $line = trim($line);
 
-<pre id="output"></pre>
+  // Controlla se la riga è un giorno della settimana
+  if (preg_match('/^(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)$/', $line)) {
+    $day = $line;
+    $italianChannels = []; // Resetta i canali italiani per il nuovo giorno
+  }
 
-<script>
-fetch('https://cors-anywhere.herokuapp.com/https://sportsonline.gl/prog.txt')
-  .then(response => response.text())
-  .then(data => {
-    var lines = data.split('\n');
-    var output = [];
-    var day = '';
-    var italianChannels = [];
+  // Controlla se la riga è un canale italiano
+  if (preg_match('/^HD\d+ ITALIAN$/', $line)) {
+    $channelNumber = preg_replace('/\D/', '', $line); // Estrae il numero del canale
+    array_push($italianChannels, 'hd' + $channelNumber);
+  }
 
-    for (var i = 0; i < lines.length; i++) {
-      var line = lines[i].trim();
-
-      // Controlla se la riga è un giorno della settimana
-      if (line.match(/^(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)$/)) {
-        day = line;
-        italianChannels = []; // Resetta i canali italiani per il nuovo giorno
-      }
-
-      // Controlla se la riga è un canale italiano
-      if (line.match(/^HD\d+ ITALIAN$/)) {
-        var channelNumber = line.match(/\d+/)[0]; // Estrae il numero del canale
-        italianChannels.push('hd' + channelNumber);
-      }
-
-      // Controlla se la riga contiene un link a una partita di calcio italiana
-      for (var j = 0; j < italianChannels.length; j++) {
-        if (line.includes(italianChannels[j])) {
-          output.push(day);
-          output.push(line);
-          output.push('');
-          break;
-        }
-      }
+  // Controlla se la riga contiene un link a una partita di calcio italiana
+  foreach ($italianChannels as $channel) {
+    if (strpos($line, $channel) !== false) {
+      array_push($output, $day);
+      array_push($output, $line);
+      array_push($output, '');
+      break;
     }
+  }
+}
 
-    document.getElementById('output').innerText = output.join('\n');
-  });
-</script>
-
-</body>
-</html>
+echo implode("\n", $output);
+?>
