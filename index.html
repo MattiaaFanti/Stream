@@ -1,4 +1,13 @@
-fetch('https://cors-anywhere.herokuapp.com/https://sportsonline.gl/prog.txt')
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Programmazione delle partite di calcio italiane</h2>
+
+<pre id="output"></pre>
+
+<script>
+fetch('https://sportsonline.gl/prog.txt')
   .then(response => response.text())
   .then(data => {
     var lines = data.split('\n');
@@ -10,7 +19,7 @@ fetch('https://cors-anywhere.herokuapp.com/https://sportsonline.gl/prog.txt')
       var line = lines[i].trim();
 
       // Controlla se la riga è un giorno della settimana
-      if (line.match(/^(LUNEDI|MARTEDI|MERCOLEDI|GIOVEDI|VENERDI|SABATO|DOMENICA)$/)) {
+      if (line.match(/^(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)$/)) {
         day = line;
         italianChannels = []; // Resetta i canali italiani per il nuovo giorno
       }
@@ -32,5 +41,9 @@ fetch('https://cors-anywhere.herokuapp.com/https://sportsonline.gl/prog.txt')
       }
     }
 
-    console.log(output.join('\n'));
+    document.getElementById('output').innerText = output.join('\n');
   });
+</script>
+
+</body>
+</html>
