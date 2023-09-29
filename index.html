@@ -1,10 +1,25 @@
+<!DOCTYPE html>
 <html>
 <head>
-<title>Leggere testo da URL</title>
+    <title>Leggere testo da URL</title>
 </head>
 <body>
-<div class="iframe">
-   <iframe sandbox = "allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation" width="1000" height="600" src="https://sportsonline.so/channels/pt/sporttv3.php" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-</div>
+    <ul>
+        <li><a href="#" onclick="loadIframe('https://sportsonline.so/channels/pt/sporttv1.php')">Sport TV 1</a></li>
+        <li><a href="#" onclick="loadIframe('https://sportsonline.so/channels/pt/sporttv2.php')">Sport TV 2</a></li>
+        <li><a href="#" onclick="loadIframe('https://sportsonline.so/channels/pt/sporttv3.php')">Sport TV 3</a></li>
+        <!-- Aggiungi altri link come desiderato -->
+    </ul>
+    <div class="iframe">
+        <iframe id="myIframe" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation" width="1000" height="600" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        function loadIframe(src) {
+            var iframe = document.getElementById('myIframe');
+            iframe.src = src;
+            return false; // Per evitare il comportamento predefinito del link
+        }
+    </script>
 </body>
 </html>
