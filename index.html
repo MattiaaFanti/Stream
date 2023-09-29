@@ -1,25 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Leggere testo da URL</title>
+    <title>Leggere link da file di testo</title>
 </head>
 <body>
-    <ul>
-        <li><a href="#" onclick="loadIframe('https://sportsonline.so/channels/pt/sporttv1.php')">Sport TV 1</a></li>
-        <li><a href="#" onclick="loadIframe('https://sportsonline.so/channels/pt/sporttv2.php')">Sport TV 2</a></li>
-        <li><a href="#" onclick="loadIframe('https://sportsonline.so/channels/pt/sporttv3.php')">Sport TV 3</a></li>
-        <!-- Aggiungi altri link come desiderato -->
+    <ul id="linkList">
+        <!-- Qui verranno aggiunti i link estratti dal file di testo -->
     </ul>
+
     <div class="iframe">
         <iframe id="myIframe" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation" width="1000" height="600" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
     </div>
 
     <script>
-        function loadIframe(src) {
-            var iframe = document.getElementById('myIframe');
-            iframe.src = src;
-            return false; // Per evitare il comportamento predefinito del link
+        // Funzione per caricare il contenuto di un file di testo da una URL
+        function loadTextFile(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    callback(xhr.responseText);
+                }
+            };
+            xhr.open("GET", url, true);
+            xhr.send();
         }
+
+        // Funzione per estrarre e filtrare i link dal contenuto del file di testo
+        function extractLinksAndPopulateList(text) {
+            var lines = text.split('\n');
+            var linkList = document.getElementById('linkList');
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i].trim();
+                // Filtra le linee con link (delimitate da "|") o linee contenenti giorni della settimana in inglese
+                if (line.includes('|') || /Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday/.test(line)) {
+                    var listItem = document.createElement('li');
+                    var link = document.createElement('a');
+                    link.href = line.split('|')[0].trim(); // Estrae il link dalla linea
+                    link.textContent = link.href;
+                    listItem.appendChild(link);
+                    linkList.appendChild(listItem);
+                }
+            }
+        }
+
+        // Carica il file di testo e estrai i link
+        loadTextFile('https://sportsonline.gl/prog.txt', extractLinksAndPopulateList);
     </script>
 </body>
 </html>
