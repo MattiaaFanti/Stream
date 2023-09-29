@@ -13,21 +13,7 @@
     </div>
 
     <script>
-        // Funzione per copiare il contenuto di iframe2 in iframe1
-        function copyContent() {
-            var iframe1 = document.getElementById('iframe1').contentWindow;
-            var iframe2 = document.getElementById('iframe2').contentWindow;
-
-            // Copia il contenuto di iframe2 in iframe1
-            iframe1.document.body.innerHTML = iframe2.document.body.innerHTML;
-        }
-
-        // Imposta il contenuto iniziale di iframe2
-        document.getElementById('iframe2').src = 'https://sportsonline.gl/prog.txt';
-
-        // Copia il contenuto iniziale di iframe2 in iframe1 quando la pagina si carica
-        window.onload = function() {
-            copyContent();
+      iframe1.contentWindow.document.body = iframe2.contentWindow.document.body.cloneNode(true);
         };
     </script>
 </body>
