@@ -3,20 +3,8 @@
 <title>Leggere testo da URL</title>
 </head>
 <body>
-<h1>Leggere testo da URL</h1>
-<div id="mio_testo"></div>
-<script>
-// Imposto l'URL da cui leggere il testo
-let url = "https://sportsonline.gl/prog.txt";
-// Leggo il testo con fetch
-fetch(url)
-  .then(response => response.text()) // Converto la risposta in testo
-  .then(text => {
-    // Mostro il testo a schermo
-    console.log(text);
-    // Oppure lo inserisco in un elemento HTML
-    document.getElementById("mio_testo").innerHTML = text;
-  });
-</script>
+<div class="iframe">
+   <iframe sandbox = "allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation" width="1000" height="600" src="https://www.youtube.com/embed/Sb_60g3u1LU" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+</div>
 </body>
 </html>
