@@ -1,34 +1,15 @@
-<!DOCTYPE html>
 <html>
-<head>
-    <title>Frame 2 in Frame 1</title>
-</head>
-<body>
-    <div class="iframe">
-        <iframe id="iframe1" width="1000" height="600" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-    </div>
-
-    <div class="iframe">
-        <iframe id="iframe2" width="1000" height="100" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
-    </div>
-
+  <head> </head>
+  <body>
+    <a href="#" onclick="sendSongName('Song 1')">Song 1</a>
+    <a href="#" onclick="sendSongName('Song 2')">Song 2</a>
+    <a href="#" onclick="sendSongName('Song 3')">Song 3</a>
     <script>
-        // Funzione per copiare il contenuto di iframe2 in iframe1
-        function copyContent(event) {
-            var iframe1 = document.getElementById('iframe1').contentWindow;
-            iframe1.postMessage(event.data, '*'); // Copia il contenuto ricevuto nel frame1
-        }
+      function sendSongName(songName) {
+        var bottomFrame = window.parent.frames["BottomFrame"];
 
-        // Imposta il contenuto iniziale di iframe2
-        document.getElementById('iframe2').src = 'https://sportsonline.gl/prog.txt';
-
-        // Copia il contenuto iniziale di iframe2 in iframe1 quando la pagina si carica
-        window.onload = function() {
-            copyContent({ data: document.getElementById('iframe2').contentDocument.body.innerHTML });
-        };
-
-        // Aggiungi un event listener per ricevere il contenuto da iframe2
-        window.addEventListener('message', copyContent);
+        bottomFrame.postMessage(songName, "*");
+      }
     </script>
-</body>
+  </body>
 </html>
