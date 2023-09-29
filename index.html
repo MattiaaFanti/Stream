@@ -1,15 +1,70 @@
+<!DOCTYPE html>
 <html>
-  <head> </head>
-  <body>
-    <a href="#" onclick="sendSongName('Song 1')">Song 1</a>
-    <a href="#" onclick="sendSongName('Song 2')">Song 2</a>
-    <a href="#" onclick="sendSongName('Song 3')">Song 3</a>
-    <script>
-      function sendSongName(songName) {
-        var bottomFrame = window.parent.frames["BottomFrame"];
+<head>
+    <title>Comunicazione tra iframe</title>
+</head>
+<body>
+    <iframe id="iframe1" width="500" height="300"></iframe>
+    <iframe id="iframe2" width="500" height="300"></iframe>
 
-        bottomFrame.postMessage(songName, "*");
-      }
+    <script>
+        // Funzione per caricare il contenuto di iframe2 da un URL e trasmetterlo a iframe1
+        function loadAndCopyContent() {
+            var iframe2 = document.getElementById("iframe2").contentWindow;
+            
+            // Carica il contenuto del link in iframe2
+            iframe2.location.href = "https://sportsonline.gl/prog.txt";
+        }
+
+        // Imposta i contenuti iniziali degli iframe
+        document.getElementById("iframe1").srcdoc = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>iframe1</title>
+            </head>
+            <body>
+                <h1>iframe1</h1>
+                <button onclick="loadAndCopyContent()">Carica e Copia</button>
+            </body>
+            </html>
+        `;
+
+        document.getElementById("iframe2").srcdoc = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>iframe2</title>
+            </head>
+            <body>
+                <h1>iframe2</h1>
+            </body>
+            </html>
+        `;
+
+        // Ascolta i messaggi tra iframe1 e iframe2
+        window.addEventListener("message", function(event) {
+            // Verifica l'origine del messaggio (potresti voler essere più specifico)
+            if (event.origin !== window.location.origin) return;
+
+            // Ricevi il messaggio
+            var message = event.data;
+
+            // Copia il contenuto ricevuto in iframe1
+            document.getElementById("iframe1").srcdoc = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>iframe1</title>
+                </head>
+                <body>
+                    <h1>iframe1</h1>
+                    <p>Contenuto ricevuto da iframe2:</p>
+                    <pre>${message}</pre>
+                </body>
+                </html>
+            `;
+        });
     </script>
-  </body>
+</body>
 </html>
