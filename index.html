@@ -13,8 +13,22 @@
     </div>
 
     <script>
-      iframe1.contentWindow.document.body = iframe2.contentWindow.document.body.cloneNode(true);
+        // Funzione per copiare il contenuto di iframe2 in iframe1
+        function copyContent(event) {
+            var iframe1 = document.getElementById('iframe1').contentWindow;
+            iframe1.postMessage(event.data, '*'); // Copia il contenuto ricevuto nel frame1
+        }
+
+        // Imposta il contenuto iniziale di iframe2
+        document.getElementById('iframe2').src = 'https://sportsonline.gl/prog.txt';
+
+        // Copia il contenuto iniziale di iframe2 in iframe1 quando la pagina si carica
+        window.onload = function() {
+            copyContent({ data: document.getElementById('iframe2').contentDocument.body.innerHTML });
         };
+
+        // Aggiungi un event listener per ricevere il contenuto da iframe2
+        window.addEventListener('message', copyContent);
     </script>
 </body>
 </html>
