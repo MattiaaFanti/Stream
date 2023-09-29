@@ -1,50 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Leggere link da file di testo</title>
+    <title>Due iframe con link interattivi</title>
 </head>
 <body>
-    <ul id="linkList">
-        <!-- Qui verranno aggiunti i link estratti dal file di testo -->
-    </ul>
+    <div class="iframe">
+        <iframe id="iframe1" width="1000" height="600" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+    </div>
 
     <div class="iframe">
-        <iframe id="myIframe" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation" width="1000" height="600" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+        <iframe id="iframe2" width="1000" height="100" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
     </div>
 
     <script>
-        // Funzione per caricare il contenuto di un file di testo da una URL
-        function loadTextFile(url, callback) {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    callback(xhr.responseText);
-                }
-            };
-            xhr.open("GET", url, true);
-            xhr.send();
-        }
-
-        // Funzione per estrarre e filtrare i link dal contenuto del file di testo
-        function extractLinksAndPopulateList(text) {
-            var lines = text.split('\n');
-            var linkList = document.getElementById('linkList');
-            for (var i = 0; i < lines.length; i++) {
-                var line = lines[i].trim();
-                // Filtra le linee con link (delimitate da "|") o linee contenenti giorni della settimana in inglese
-                if (line.includes('|') || /Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday/.test(line)) {
-                    var listItem = document.createElement('li');
-                    var link = document.createElement('a');
-                    link.href = line.split('|')[0].trim(); // Estrae il link dalla linea
-                    link.textContent = link.href;
-                    listItem.appendChild(link);
-                    linkList.appendChild(listItem);
-                }
+        // Funzione per rendere tutti i link cliccabili all'interno degli iframe
+        function makeLinksClickable(iframeId) {
+            var iframe = document.getElementById(iframeId);
+            var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+            var links = iframeDocument.getElementsByTagName('a');
+            for (var i = 0; i < links.length; i++) {
+                links[i].addEventListener('click', function(e) {
+                    e.preventDefault(); // Impedisce il comportamento predefinito del link
+                    var linkHref = this.getAttribute('href');
+                    var topIframe = document.getElementById('iframe1');
+                    topIframe.src = linkHref; // Cambia il contenuto del frame superiore con il link cliccato
+                });
             }
         }
 
-        // Carica il file di testo e estrai i link
-        loadTextFile('https://sportsonline.gl/prog.txt', extractLinksAndPopulateList);
+        // Funzione per impostare il link iniziale per l'iframe2
+        function setInitialLink() {
+            var iframe2 = document.getElementById('iframe2');
+            var iframe2Document = iframe2.contentDocument || iframe2.contentWindow.document;
+            var link = iframe2Document.getElementById('initialLink'); // Cambia 'initialLink' con l'ID del link desiderato
+            if (link) {
+                var linkHref = link.getAttribute('href');
+                var topIframe = document.getElementById('iframe1');
+                topIframe.src = linkHref; // Imposta il contenuto iniziale del frame superiore
+            }
+        }
+
+        // Imposta il contenuto degli iframe
+        document.getElementById('iframe1').src = '';
+        document.getElementById('iframe2').src = 'https://sportsonline.gl/prog.txt';
+
+        // Rendi cliccabili i link all'interno del frame inferiore
+        makeLinksClickable('iframe2');
+
+        // Imposta il link iniziale per l'iframe2
+        window.onload = function() {
+            setInitialLink();
+        };
     </script>
 </body>
 </html>
