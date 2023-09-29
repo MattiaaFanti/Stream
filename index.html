@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Due iframe con link interattivi</title>
+    <title>Frame 2 in Frame 1</title>
 </head>
 <body>
     <div class="iframe">
@@ -13,43 +13,21 @@
     </div>
 
     <script>
-        // Funzione per rendere tutti i link cliccabili all'interno degli iframe
-        function makeLinksClickable(iframeId) {
-            var iframe = document.getElementById(iframeId);
-            var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-            var links = iframeDocument.getElementsByTagName('a');
-            for (var i = 0; i < links.length; i++) {
-                links[i].addEventListener('click', function(e) {
-                    e.preventDefault(); // Impedisce il comportamento predefinito del link
-                    var linkHref = this.getAttribute('href');
-                    var topIframe = document.getElementById('iframe1');
-                    topIframe.src = linkHref; // Cambia il contenuto del frame superiore con il link cliccato
-                });
-            }
+        // Funzione per copiare il contenuto di iframe2 in iframe1
+        function copyContent() {
+            var iframe1 = document.getElementById('iframe1').contentWindow;
+            var iframe2 = document.getElementById('iframe2').contentWindow;
+
+            // Copia il contenuto di iframe2 in iframe1
+            iframe1.document.body.innerHTML = iframe2.document.body.innerHTML;
         }
 
-        // Funzione per impostare il link iniziale per l'iframe2
-        function setInitialLink() {
-            var iframe2 = document.getElementById('iframe2');
-            var iframe2Document = iframe2.contentDocument || iframe2.contentWindow.document;
-            var link = iframe2Document.getElementById('initialLink'); // Cambia 'initialLink' con l'ID del link desiderato
-            if (link) {
-                var linkHref = link.getAttribute('href');
-                var topIframe = document.getElementById('iframe1');
-                topIframe.src = linkHref; // Imposta il contenuto iniziale del frame superiore
-            }
-        }
-
-        // Imposta il contenuto degli iframe
-        document.getElementById('iframe1').src = '';
+        // Imposta il contenuto iniziale di iframe2
         document.getElementById('iframe2').src = 'https://sportsonline.gl/prog.txt';
 
-        // Rendi cliccabili i link all'interno del frame inferiore
-        makeLinksClickable('iframe2');
-
-        // Imposta il link iniziale per l'iframe2
+        // Copia il contenuto iniziale di iframe2 in iframe1 quando la pagina si carica
         window.onload = function() {
-            setInitialLink();
+            copyContent();
         };
     </script>
 </body>
