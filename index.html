@@ -1,24 +1,81 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <title>Comunicazione tra iframe</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    #container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #iframe {
+      width: 500px;
+      height: 300px;
+      border: 1px solid black;
+    }
+
+    input {
+      width: 400px;
+    }
+
+    button {
+      margin: 10px;
+    }
+  </style>
 </head>
 <body>
-    <button onclick="copyContent()">Copia da iframe2 a iframe1</button>
-    <div id="iframe1" style="width: 500px; height: 300px;"></div>
-    <iframe id="iframe2" width="500" height="300" src="https://sportsonline.gl/prog.txt"></iframe>
+  <div id="container">
+    <h1>How to easily send and receive data with an iframe</h1>
+    <iframe id="iframe" src="https://sportsonline.gl/prog.txt"></iframe>
+    <input id="input" type="text" placeholder="Type a message here" />
+    <button id="send">Send message to iframe</button>
+    <button id="receive">Receive message from iframe</button>
+  </div>
+  <script>
+    // Get the iframe element
+    const iframe = document.getElementById("iframe");
 
-    <script>
-        // Funzione per copiare il contenuto di iframe2 in iframe1
-        function copyContent() {
-            var iframe2 = document.getElementById("iframe2");
+    // Get the input element
+    const input = document.getElementById("input");
 
-            // Carica il contenuto di iframe2
-            iframe2.onload = function() {
-                var content = iframe2.contentDocument.documentElement.innerHTML;
-                document.getElementById("iframe1").innerHTML = content;
-            };
+    // Get the send button
+    const send = document.getElementById("send");
+
+    // Get the receive button
+    const receive = document.getElementById("receive");
+
+    // Define a function to send a message to the iframe
+    function sendMessage() {
+      // Get the value of the input
+      const message = input.value;
+
+      // Check if the message is not empty
+      if (message) {
+        // Send the message to the iframe using postMessage
+        iframe.contentWindow.postMessage(message, "*");
+      }
+    }
+
+    // Define a function to receive a message from the iframe
+    function receiveMessage() {
+      // Add an event listener for the message event
+      window.addEventListener("message", (event) => {
+        // Check if the origin of the message is the same as the iframe source
+        if (event.origin === "https://sportsonline") {
+          // Display an alert with the message data
+          alert("Message from iframe: " + event.data);
         }
-    </script>
+      });
+    }
+
+    // Add a click event listener to the send button
+    send.addEventListener("click", sendMessage);
+
+    // Add a click event listener to the receive button
+    receive.addEventListener("click", receiveMessage);
+  </script>
 </body>
 </html>
