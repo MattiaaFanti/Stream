@@ -15,7 +15,7 @@
 <body>
   <h1>Come copiare il contenuto di un iframe e passarlo a un altro iframe</h1>
   <p>Questo è l'iframe principale che contiene due iframe figli.</p>
-  <iframe id="iframe1" src="https://www.html.it/pag/16066/liframe/"></iframe>
+  <iframe id="iframe1" src="https://www.html.it/pag/16067/lattributo-name/"></iframe>
   <iframe id="iframe2" src="https://sportsonline.gl/prog.txt"></iframe>
   <button id="copy">Copia il contenuto dell'iframe2 nell'iframe1</button>
   <script>
@@ -31,8 +31,11 @@
       // Ottenere il contenuto dell'iframe2 come una stringa
       const content = iframe2.contentWindow.document.body.innerText;
 
+      // Convertire i caratteri speciali in entità HTML usando il metodo escape
+      const escapedContent = escape(content);
+
       // Inviare il contenuto all'iframe1 usando postMessage
-      iframe1.contentWindow.postMessage(content, "*");
+      iframe1.contentWindow.postMessage(escapedContent, "*");
     }
 
     // Aggiungere un listener per il messaggio proveniente dall'iframe1
