@@ -6,59 +6,46 @@
       height: 200px;
       border: 1px solid black;
     }
+
+    button {
+      margin: 10px;
+    }
   </style>
 </head>
 <body>
-  <h1>Come caricare un collegamento ipertestuale da un iframe a un altro iframe</h1>
+  <h1>Come copiare il contenuto di un iframe e passarlo a un altro iframe</h1>
   <p>Questo è l'iframe principale che contiene due iframe figli.</p>
-  <iframe id="iframe1" src="https://www.tutorialspoint.com/html/html_iframe.htm"></iframe>
-  <iframe id="iframe2" src="https://www.tutorialspoint.com/html/html_links.htm"></iframe>
+  <iframe id="iframe1" src="https://www.html.it/pag/16066/liframe/"></iframe>
+  <iframe id="iframe2" src="https://sportsonline.gl/prog.txt"></iframe>
+  <button id="copy">Copia il contenuto dell'iframe2 nell'iframe1</button>
   <script>
     // Ottenere gli elementi iframe
     const iframe1 = document.getElementById("iframe1");
     const iframe2 = document.getElementById("iframe2");
 
-    // Definire una funzione per inviare il messaggio all'iframe1
-    function sendMessageToIframe1() {
-      // Creare il messaggio con l'URL da caricare nell'iframe1
-      const message = "https://www.tutorialspoint.com/html/html_layout.htm";
+    // Ottenere l'elemento bottone
+    const copy = document.getElementById("copy");
 
-      // Inviare il messaggio all'iframe1 usando postMessage
-      iframe1.contentWindow.postMessage(message, "*");
-    }
+    // Definire una funzione per copiare il contenuto dell'iframe2 nell'iframe1
+    function copyContent() {
+      // Ottenere il contenuto dell'iframe2 come una stringa
+      const content = iframe2.contentWindow.document.body.innerText;
 
-    // Definire una funzione per inviare il messaggio all'iframe2
-    function sendMessageToIframe2() {
-      // Creare il messaggio con l'URL da caricare nell'iframe2
-      const message = "https://www.tutorialspoint.com/html/html_tables.htm";
-
-      // Inviare il messaggio all'iframe2 usando postMessage
-      iframe2.contentWindow.postMessage(message, "*");
+      // Inviare il contenuto all'iframe1 usando postMessage
+      iframe1.contentWindow.postMessage(content, "*");
     }
 
     // Aggiungere un listener per il messaggio proveniente dall'iframe1
     window.addEventListener("message", (event) => {
       // Controllare se l'origine del messaggio è la stessa dell'iframe1
-      if (event.origin === "https://www.tutorialspoint.com") {
-        // Controllare se il messaggio è una richiesta di inviare il messaggio all'iframe2
-        if (event.data === "send message to iframe2") {
-          // Chiamare la funzione per inviare il messaggio all'iframe2
-          sendMessageToIframe2();
-        }
+      if (event.origin === "https://www.html.it") {
+        // Sostituire il contenuto dell'iframe1 con il messaggio ricevuto
+        iframe1.contentWindow.document.body.innerHTML = event.data;
       }
     });
 
-    // Aggiungere un listener per il messaggio proveniente dall'iframe2
-    window.addEventListener("message", (event) => {
-      // Controllare se l'origine del messaggio è la stessa dell'iframe2
-      if (event.origin === "https://www.tutorialspoint.com") {
-        // Controllare se il messaggio è una richiesta di inviare il messaggio all'iframe1
-        if (event.data === "send message to iframe1") {
-          // Chiamare la funzione per inviare il messaggio all'iframe1
-          sendMessageToIframe1();
-        }
-      }
-    });
+    // Aggiungere un listener per il click sul bottone
+    copy.addEventListener("click", copyContent);
   </script>
 </body>
 </html>
