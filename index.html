@@ -42,8 +42,15 @@
     window.addEventListener("message", (event) => {
       // Controllare se l'origine del messaggio è la stessa dell'iframe1
       if (event.origin === "https://www.html.it") {
-        // Sostituire il contenuto dell'iframe1 con il messaggio ricevuto
-        iframe1.contentWindow.document.body.innerHTML = event.data;
+        // Creare un elemento pre con il messaggio ricevuto come contenuto
+        const pre = document.createElement("pre");
+        pre.textContent = event.data;
+
+        // Svuotare il contenuto dell'iframe1
+        iframe1.contentWindow.document.body.innerHTML = "";
+
+        // Aggiungere l'elemento pre al contenuto dell'iframe1
+        iframe1.contentWindow.document.body.appendChild(pre);
       }
     });
 
