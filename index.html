@@ -1,61 +1,23 @@
+<!DOCTYPE html>
 <html>
-<head>
-  <style>
-    iframe {
-      width: 300px;
-      height: 200px;
-      border: 1px solid black;
-    }
-
-    button {
-      margin: 10px;
-    }
-  </style>
-</head>
 <body>
-  <h1>Come copiare il contenuto di un iframe e passarlo a un altro iframe</h1>
-  <p>Questo è l'iframe principale che contiene due iframe figli.</p>
-  <iframe id="iframe1" src="https://www.html.it/pag/16067/lattributo-name/"></iframe>
-  <iframe id="iframe2" src="https://sportsonline.gl/prog.txt"></iframe>
-  <button id="copy">Copia il contenuto dell'iframe2 nell'iframe1</button>
-  <script>
-    // Ottenere gli elementi iframe
-    const iframe1 = document.getElementById("iframe1");
-    const iframe2 = document.getElementById("iframe2");
 
-    // Ottenere l'elemento bottone
-    const copy = document.getElementById("copy");
+<h2>Il mio sito</h2>
 
-    // Definire una funzione per copiare il contenuto dell'iframe2 nell'iframe1
-    function copyContent() {
-      // Ottenere il contenuto dell'iframe2 come una stringa
-      const content = iframe2.contentWindow.document.body.innerText;
+<iframe id="myFrame" src="https://sportsonline.gl/prog.txt" style="height:200px;width:100%;"></iframe>
 
-      // Convertire i caratteri speciali in entità HTML usando il metodo escape
-      const escapedContent = escape(content);
+<button onclick="myFunction()">Copia il testo</button>
 
-      // Inviare il contenuto all'iframe1 usando postMessage
-      iframe1.contentWindow.postMessage(escapedContent, "*");
-    }
+<p id="demo"></p>
 
-    // Aggiungere un listener per il messaggio proveniente dall'iframe1
-    window.addEventListener("message", (event) => {
-      // Controllare se l'origine del messaggio è la stessa dell'iframe1
-      if (event.origin === "https://www.html.it") {
-        // Creare un elemento pre con il messaggio ricevuto come contenuto
-        const pre = document.createElement("pre");
-        pre.textContent = event.data;
+<script>
+function myFunction() {
+  var iframe = document.getElementById('myFrame');
+  var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+  var text = innerDoc.body.innerText;
+  document.getElementById("demo").innerText = text;
+}
+</script>
 
-        // Svuotare il contenuto dell'iframe1
-        iframe1.contentWindow.document.body.innerHTML = "";
-
-        // Aggiungere l'elemento pre al contenuto dell'iframe1
-        iframe1.contentWindow.document.body.appendChild(pre);
-      }
-    });
-
-    // Aggiungere un listener per il click sul bottone
-    copy.addEventListener("click", copyContent);
-  </script>
 </body>
 </html>
