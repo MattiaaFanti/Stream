@@ -5,45 +5,20 @@
 </head>
 <body>
     <button onclick="copyContent()">Copia da iframe2 a iframe1</button>
-    <iframe id="iframe1" width="500" height="300"></iframe>
+    <div id="iframe1" style="width: 500px; height: 300px;"></div>
     <iframe id="iframe2" width="500" height="300" src="https://sportsonline.gl/prog.txt"></iframe>
 
     <script>
         // Funzione per copiare il contenuto di iframe2 in iframe1
         function copyContent() {
-            var iframe1 = document.getElementById("iframe1").contentWindow;
-            var iframe2 = document.getElementById("iframe2").contentWindow;
+            var iframe2 = document.getElementById("iframe2");
 
-            // Copia il contenuto di iframe2 in iframe1
-            var content = iframe2.document.documentElement.innerHTML;
-            iframe1.document.open();
-            iframe1.document.write(content);
-            iframe1.document.close();
+            // Carica il contenuto di iframe2
+            iframe2.onload = function() {
+                var content = iframe2.contentDocument.documentElement.innerHTML;
+                document.getElementById("iframe1").innerHTML = content;
+            };
         }
-
-        // Ascolta i messaggi tra iframe1 e iframe2
-        window.addEventListener("message", function(event) {
-            // Verifica l'origine del messaggio (potresti voler essere più specifico)
-            if (event.origin !== window.location.origin) return;
-
-            // Ricevi il messaggio
-            var message = event.data;
-
-            // Copia il contenuto ricevuto in iframe1
-            document.getElementById("iframe1").srcdoc = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>iframe1</title>
-                </head>
-                <body>
-                    <h1>iframe1</h1>
-                    <p>Contenuto ricevuto da iframe2:</p>
-                    <pre>${message}</pre>
-                </body>
-                </html>
-            `;
-        });
     </script>
 </body>
 </html>
