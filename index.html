@@ -1,81 +1,64 @@
 <html>
 <head>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-
-    #container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    #iframe {
-      width: 500px;
-      height: 300px;
+    iframe {
+      width: 300px;
+      height: 200px;
       border: 1px solid black;
-    }
-
-    input {
-      width: 400px;
-    }
-
-    button {
-      margin: 10px;
     }
   </style>
 </head>
 <body>
-  <div id="container">
-    <h1>How to easily send and receive data with an iframe</h1>
-    <iframe id="iframe" src="https://sportsonline.gl/prog.txt"></iframe>
-    <input id="input" type="text" placeholder="Type a message here" />
-    <button id="send">Send message to iframe</button>
-    <button id="receive">Receive message from iframe</button>
-  </div>
+  <h1>Come caricare un collegamento ipertestuale da un iframe a un altro iframe</h1>
+  <p>Questo è l'iframe principale che contiene due iframe figli.</p>
+  <iframe id="iframe1" src="https://www.tutorialspoint.com/html/html_iframe.htm"></iframe>
+  <iframe id="iframe2" src="https://www.tutorialspoint.com/html/html_links.htm"></iframe>
   <script>
-    // Get the iframe element
-    const iframe = document.getElementById("iframe");
+    // Ottenere gli elementi iframe
+    const iframe1 = document.getElementById("iframe1");
+    const iframe2 = document.getElementById("iframe2");
 
-    // Get the input element
-    const input = document.getElementById("input");
+    // Definire una funzione per inviare il messaggio all'iframe1
+    function sendMessageToIframe1() {
+      // Creare il messaggio con l'URL da caricare nell'iframe1
+      const message = "https://www.tutorialspoint.com/html/html_layout.htm";
 
-    // Get the send button
-    const send = document.getElementById("send");
-
-    // Get the receive button
-    const receive = document.getElementById("receive");
-
-    // Define a function to send a message to the iframe
-    function sendMessage() {
-      // Get the value of the input
-      const message = input.value;
-
-      // Check if the message is not empty
-      if (message) {
-        // Send the message to the iframe using postMessage
-        iframe.contentWindow.postMessage(message, "*");
-      }
+      // Inviare il messaggio all'iframe1 usando postMessage
+      iframe1.contentWindow.postMessage(message, "*");
     }
 
-    // Define a function to receive a message from the iframe
-    function receiveMessage() {
-      // Add an event listener for the message event
-      window.addEventListener("message", (event) => {
-        // Check if the origin of the message is the same as the iframe source
-        if (event.origin === "https://sportsonline") {
-          // Display an alert with the message data
-          alert("Message from iframe: " + event.data);
+    // Definire una funzione per inviare il messaggio all'iframe2
+    function sendMessageToIframe2() {
+      // Creare il messaggio con l'URL da caricare nell'iframe2
+      const message = "https://www.tutorialspoint.com/html/html_tables.htm";
+
+      // Inviare il messaggio all'iframe2 usando postMessage
+      iframe2.contentWindow.postMessage(message, "*");
+    }
+
+    // Aggiungere un listener per il messaggio proveniente dall'iframe1
+    window.addEventListener("message", (event) => {
+      // Controllare se l'origine del messaggio è la stessa dell'iframe1
+      if (event.origin === "https://www.tutorialspoint.com") {
+        // Controllare se il messaggio è una richiesta di inviare il messaggio all'iframe2
+        if (event.data === "send message to iframe2") {
+          // Chiamare la funzione per inviare il messaggio all'iframe2
+          sendMessageToIframe2();
         }
-      });
-    }
+      }
+    });
 
-    // Add a click event listener to the send button
-    send.addEventListener("click", sendMessage);
-
-    // Add a click event listener to the receive button
-    receive.addEventListener("click", receiveMessage);
+    // Aggiungere un listener per il messaggio proveniente dall'iframe2
+    window.addEventListener("message", (event) => {
+      // Controllare se l'origine del messaggio è la stessa dell'iframe2
+      if (event.origin === "https://www.tutorialspoint.com") {
+        // Controllare se il messaggio è una richiesta di inviare il messaggio all'iframe1
+        if (event.data === "send message to iframe1") {
+          // Chiamare la funzione per inviare il messaggio all'iframe1
+          sendMessageToIframe1();
+        }
+      }
+    });
   </script>
 </body>
 </html>
